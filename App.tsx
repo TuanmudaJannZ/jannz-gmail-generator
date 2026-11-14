@@ -27,7 +27,7 @@ function Shell() {
             <div className="logo" aria-hidden="true">J</div>
             <div className="leading-tight"><p className="font-semibold">JannZ</p><p className="muted text-xs">Gmail Generator</p></div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
             <span className="status glass-lite" title="Semua proses berjalan lokal di browser"><i />Local • Offline-ready</span>
             <button className="icon-btn" onClick={() => setPalette(true)} aria-label="Buka command palette (Ctrl+K)"><kbd className="kbd">⌘K</kbd></button>
             <button className="icon-btn" onClick={() => A.go("settings")} aria-label="Pengaturan"><Cog size={18} /></button>
