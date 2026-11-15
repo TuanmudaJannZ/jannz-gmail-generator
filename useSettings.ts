@@ -8,7 +8,7 @@ export function useSettings(): [Settings, (p: Partial<Settings>) => void, () => 
   useEffect(() => {
     save("jannz.settings", s);
     const r = document.documentElement;
-    r.dataset.theme = s.theme; r.dataset.compact = String(s.compact); r.dataset.font = s.font; r.lang = s.lang; r.dataset.reduce = String(s.reduceMotion);
+    r.dataset.theme = s.theme; r.dataset.compact = String(s.compact); r.dataset.font = s.font; r.lang = s.lang; r.dataset.reduce = String(s.reduceMotion); r.dataset.anim = String(s.intensity);
     r.style.setProperty("--blur", s.blur + "px"); r.style.setProperty("--primary", s.accent); r.style.setProperty("--primary-rgb", [1, 3, 5].map((i) => parseInt(s.accent.slice(i, i + 2), 16)).join(" ")); r.style.setProperty("--intensity", String(s.intensity));
   }, [s]);
   const update = useCallback((p: Partial<Settings>) => setS((o) => ({ ...o, ...p })), []);

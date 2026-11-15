@@ -6,6 +6,7 @@ import { play, Sfx } from "./sound";
 import { Settings, useSettings } from "./useSettings";
 import { locale, makeT } from "./i18n";
 
+export type ToastType = "success" | "error" | "warning" | "info";
 export type Page = "home" | "generator" | "history" | "settings";
 export type HistoryItem = { id: string; original: string; total: number; limit: number; date: string };
 
@@ -24,7 +25,7 @@ function useStore() {
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [copied, setCopied] = useState(0);
   const [history, setHistory] = useState<HistoryItem[]>(() => load<HistoryItem[]>("jannz.history", []));
-  const [toastMsg, setToastMsg] = useState<{ id: number; text: string } | null>(null);
+  const [toastMsg, setToastMsg] = useState<{ id: number; text: string; type: ToastType } | null>(null);
 
   const t = useMemo(() => makeT(settings.lang), [settings.lang]);
   const fmt = useCallback((n: number) => n.toLocaleString(locale(settings.lang)), [settings.lang]);
@@ -38,10 +39,11 @@ function useStore() {
   const limitRef = useRef(500); limitRef.current = limit;
   const timer = useRef<number>();
 
-  const toast = useCallback((text: string) => {
-    setToastMsg({ id: Date.now(), text });
+  // Satu toast aktif; pesan identik hanya memperpanjang waktu tampil (tanpa animasi ulang / penumpukan).
+  const toast = useCallback((text: string, type: ToastType = "success") => {
+    setToastMsg((p) => (p && p.text === text && p.type === type ? p : { id: Date.now(), text, type }));
     window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => setToastMsg(null), 2400);
+    timer.current = window.setTimeout(() => setToastMsg(null), type === "error" || type === "warning" ? 3800 : 2400);
   }, []);
   const sfx = useCallback((k: Sfx) => { if (sRef.current.sound) play(k); }, []);
   const go = useCallback((p: Page) => { sfx("nav"); setPage(p); window.scrollTo(0, 0); }, [sfx]);
@@ -62,25 +64,25 @@ function useStore() {
     if (room <= 0 || !baseRef.current) return;
     const more = generate(baseRef.current, room, cur);
     setRows((r) => r.concat(more));
-    toast(tRef.current("toast.loaded", { n: fmtRef.current(more.length) }));
+    toast(tRef.current("toast.loaded", { n: fmtRef.current(more.length) }), "info");
   }, [toast]);
 
   const copy = useCallback(async (text: string, count: number) => {
     const ok = await copyToClipboard(text);
     if (ok) { setCopied((c) => c + count); sfx("copy"); toast(count === 1 ? tRef.current("toast.copied1") : tRef.current("toast.copiedN", { n: fmtRef.current(count) })); }
-    else toast(tRef.current("toast.copyFail"));
+    else toast(tRef.current("toast.copyFail"), "error");
     return ok;
   }, [sfx, toast]);
 
   const toggle = useCallback((n: number) => setSelected((s) => { const x = new Set(s); x.has(n) ? x.delete(n) : x.add(n); return x; }), []);
   const selectMany = useCallback((ns: number[]) => setSelected(new Set(ns)), []);
   const deselectAll = useCallback(() => setSelected(new Set()), []);
-  const clearResults = useCallback(() => { setRows([]); setSelected(new Set()); setOriginal(""); setBase(""); setTotal(0); setCopied(0); toast(tRef.current("toast.cleared")); }, [toast]);
+  const clearResults = useCallback(() => { setRows([]); setSelected(new Set()); setOriginal(""); setBase(""); setTotal(0); setCopied(0); toast(tRef.current("toast.cleared"), "info"); }, [toast]);
 
   const exportRows = useCallback((kind: "txt" | "csv", numbered: boolean) => {
     const sel = selRef.current;
     const list = sel.size > 0 ? rowsRef.current.filter((r) => sel.has(r.n)) : rowsRef.current;
-    if (!list.length) { toast(tRef.current("toast.noExport")); return; }
+    if (!list.length) { toast(tRef.current("toast.noExport"), "warning"); return; }
     if (kind === "txt") download("gmail-variations.txt", toTxt(list, numbered), "text/plain");
     else download("gmail-variations.csv", toCsv(list, numbered), "text/csv");
     toast(tRef.current("toast.exported", { n: fmtRef.current(list.length), kind: kind.toUpperCase() }));
@@ -88,13 +90,14 @@ function useStore() {
 
   const exportAll = useCallback(async (kind: "txt" | "csv", numbered: boolean) => {
     const b = baseRef.current;
-    if (!b) { toast(tRef.current("toast.noExport")); return; }
+    if (!b) { toast(tRef.current("toast.noExport"), "warning"); return; }
     const count = Math.min(totalRef.current, EXPORT_MAX);
-    setExporting(true); toast(tRef.current("toast.exporting"));
+    setExporting(true); toast(tRef.current("toast.exporting"), "info");
     try {
       const parts = await buildParts(b, count, numbered, kind);
       download(`gmail-variations-all.${kind}`, parts, kind === "txt" ? "text/plain" : "text/csv");
-      toast(count < totalRef.current ? tRef.current("toast.exportCapped", { n: fmtRef.current(count) }) : tRef.current("toast.exported", { n: fmtRef.current(count), kind: kind.toUpperCase() }));
+      if (count < totalRef.current) toast(tRef.current("toast.exportCapped", { n: fmtRef.current(count) }), "warning");
+      else toast(tRef.current("toast.exported", { n: fmtRef.current(count), kind: kind.toUpperCase() }));
     } finally { setExporting(false); }
   }, [toast]);
 
@@ -105,7 +108,7 @@ function useStore() {
     toast(tRef.current("toast.saved"));
   }, [original, total, history, toast]);
   const deleteHistory = useCallback((id: string) => persist(history.filter((h) => h.id !== id)), [history]);
-  const clearHistory = useCallback(() => { setHistory([]); remove("jannz.history"); toast(tRef.current("toast.histCleared")); }, [toast]);
+  const clearHistory = useCallback(() => { setHistory([]); remove("jannz.history"); toast(tRef.current("toast.histCleared"), "info"); }, [toast]);
   const openHistory = useCallback((h: HistoryItem) => { setInput(h.original); run(h.original, Math.min(h.limit, 5000)); }, [run]);
 
   return useMemo(() => ({

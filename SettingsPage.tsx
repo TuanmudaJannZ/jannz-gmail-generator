@@ -43,7 +43,7 @@ export function SettingsPage() {
       </GlassCard>
       <div className="flex flex-wrap gap-3">
         <Button variant="danger" disabled={!history.length} onClick={clearHistory}><Trash2 size={16} />{t("set.clearHistory")}</Button>
-        <Button onClick={() => { resetSettings(); toast(t("toast.reset")); }}><RotateCcw size={16} />{t("set.reset")}</Button>
+        <Button onClick={() => { resetSettings(); toast(t("toast.reset"), "info"); }}><RotateCcw size={16} />{t("set.reset")}</Button>
       </div>
     </div>
   );

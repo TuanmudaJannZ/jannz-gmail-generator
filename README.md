@@ -59,6 +59,17 @@ Kalau build gagal karena pengecekan TypeScript, sementara ubah script `build` di
 - Hormati `prefers-reduced-motion`; ada fallback bila `backdrop-filter` tidak didukung.
 - Ikon aplikasi, favicon, dan `manifest.webmanifest` (nama dan ikon saat "Tambahkan ke layar utama").
 
+## Sistem animasi (satu bahasa gerak)
+
+- **Token** di `index.css` (`--ease-out`, `--ease-spring`, `--t-fast/base/slow`) dan `motion.ts` (untuk framer-motion) memakai easing & durasi yang sama.
+- **Kaca berlapis**: `.glass` = kilau spekular + bias cahaya aksen + pantulan diagonal + tepi terarah (atas terang, bawah redup) + highlight dalam. Satu `backdrop-filter` per permukaan.
+- **Ripple**: satu listener global di `ripple.ts` (tombol, icon-btn, item palette, baris tombol). Navigasi punya efek tetesnya sendiri.
+- **Modal**: `Modal.tsx` dipakai Command Palette dan konfirmasi hapus: scale-in, scrim blur, Escape, focus trap, kunci scroll, `inert` pada latar, fokus kembali ke pemicu.
+- **Toast**: `Toast.tsx`, tipe `success | error | warning | info`, hanya satu toast aktif (pesan baru menggantikan, pesan sama hanya memperpanjang waktu).
+- **Transisi halaman**: CSS `.page-in` (opacity + translate pada elemen kaca itu sendiri; opacity tidak dipasang pada pembungkus agar blur tidak berkedip).
+- **Skeleton**: shimmer berbasis transform; `Results` memakai skeleton yang meniru kartu asli (tinggi baris = `.row`), jadi tanpa layout shift.
+- **Gerak dikurangi**: `prefers-reduced-motion`, pengaturan "Kurangi gerakan", dan "Animasi: Mati" menonaktifkan animasi masuk, ripple, dan efek magnetik/tilt.
+
 ## Struktur file (flat)
 
 ```
