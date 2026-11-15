@@ -17,7 +17,7 @@
 }
 * { -webkit-tap-highlight-color: transparent; }
 html, body, #root { min-height: 100%; }
-body { -webkit-text-size-adjust: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: Inter, "SF Pro Display", system-ui, sans-serif; overflow-x: hidden; }
+body { -webkit-text-size-adjust: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); font-feature-settings: "ss01", "cv11"; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 .mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
 .muted { color: var(--muted); }
 .app { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: max(16px, env(safe-area-inset-top)) 16px 130px; min-height: 100vh; min-height: 100dvh; }
@@ -25,7 +25,7 @@ body { -webkit-text-size-adjust: 100%; margin: 0; background: var(--bg); color: 
 :root[data-compact="true"] .glass { border-radius: 16px; }
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0 20px; }
 .logo { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--primary), var(--secondary)); box-shadow: 0 0 24px -4px var(--primary), inset 0 1px 0 rgb(255 255 255 / .4); }
-.hero-title { font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; background: linear-gradient(120deg, var(--text) 20%, var(--primary) 60%, var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-title { font-size: clamp(1.7rem, 7.2vw, 3.2rem); font-weight: 700; letter-spacing: -.035em; line-height: 1.12; text-wrap: balance; background: linear-gradient(120deg, var(--text) 20%, var(--primary) 60%, var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 /* ---------- Liquid glass ---------- */
 .glass {
@@ -184,3 +184,14 @@ body { -webkit-text-size-adjust: 100%; margin: 0; background: var(--bg); color: 
 :root[data-theme="light"] .stars { display: none; }
 :root[data-theme="light"] .arc { opacity: .4; }
 :root[data-theme="light"] .nebula { opacity: .5; }
+.logo-img { width: 38px; height: 38px; border-radius: 12px; box-shadow: 0 0 24px -4px var(--primary); }
+
+/* ---------- Tipografi ---------- */
+:root { --font-body: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif; --font-display: "Unbounded", "Plus Jakarta Sans", system-ui, sans-serif; }
+:root[data-font="techno"] { --font-body: "Space Grotesk", system-ui, sans-serif; --font-display: "Syne", "Space Grotesk", system-ui, sans-serif; }
+:root[data-font="classic"] { --font-body: Inter, "SF Pro Display", system-ui, sans-serif; --font-display: Inter, "SF Pro Display", system-ui, sans-serif; }
+h1, h2, .hero-title, .font-display { font-family: var(--font-display); font-weight: 600; letter-spacing: -.02em; }
+:root[data-font="techno"] .hero-title, :root[data-font="techno"] h1 { font-weight: 800; letter-spacing: -.01em; }
+:root[data-font="classic"] h1, :root[data-font="classic"] h2, :root[data-font="classic"] .font-display { letter-spacing: -.02em; }
+.muted.uppercase, .uppercase { letter-spacing: .14em; }
+p { line-height: 1.6; }

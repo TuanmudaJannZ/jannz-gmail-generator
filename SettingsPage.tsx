@@ -21,6 +21,9 @@ export function SettingsPage() {
           <Button variant={s.theme === "dark" ? "primary" : "glass"} onClick={() => u({ theme: "dark" })}><Moon size={16} />Dark</Button>
           <Button variant={s.theme === "light" ? "primary" : "glass"} onClick={() => u({ theme: "light" })}><Sun size={16} />Light</Button>
         </div></Row>
+        <Row label="Font" hint="Fluid: Unbounded + Jakarta · Techno: Syne + Space Grotesk · Classic: Inter"><div className="flex gap-1 flex-wrap justify-end">
+          {([["fluid", "Fluid"], ["techno", "Techno"], ["classic", "Classic"]] as const).map(([k, l]) => <Button key={k} variant={s.font === k ? "primary" : "glass"} onClick={() => u({ font: k })}>{l}</Button>)}
+        </div></Row>
         <Row label="Animation intensity" hint="Mempengaruhi tilt, stagger, dan gerak"><div className="flex gap-1">
           {["Off", "Normal", "High"].map((l, i) => <Button key={l} variant={s.intensity === i ? "primary" : "glass"} onClick={() => u({ intensity: i })}>{l}</Button>)}
         </div></Row>

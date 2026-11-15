@@ -18,7 +18,7 @@ export function Stats() {
         <div key={it.label} className={i === 0 ? "col-span-2 lg:col-span-1" : ""}>
           <GlassCard delay={i * 0.06} className="p-4 h-full">
             <p className="muted text-xs uppercase tracking-wider mb-2">{it.label}</p>
-            {A.loading ? <div className="skeleton h-7 w-3/4" /> : <div className="text-2xl font-semibold">{it.node}</div>}
+            {A.loading ? <div className="skeleton h-7 w-3/4" /> : <div className="text-2xl font-display">{it.node}</div>}
           </GlassCard>
         </div>
       ))}

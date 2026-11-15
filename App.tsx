@@ -24,8 +24,8 @@ function Shell() {
       <div className="app">
         <div className="topbar">
           <div className="flex items-center gap-3">
-            <div className="logo" aria-hidden="true">J</div>
-            <div className="leading-tight"><p className="font-semibold">JannZ</p><p className="muted text-xs">Gmail Generator</p></div>
+            <img src="/favicon.svg" alt="" width={38} height={38} className="logo-img" />
+            <div className="leading-tight"><p className="font-display text-[15px]">JannZ</p><p className="muted text-xs">Gmail Generator</p></div>
           </div>
           <div className="hidden md:flex items-center gap-2">
             <span className="status glass-lite" title="Semua proses berjalan lokal di browser"><i />Local • Offline-ready</span>
