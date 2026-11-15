@@ -1,16 +1,17 @@
 import { CSSProperties, MouseEvent, useState } from "react";
 import { History, Home, Settings, Sparkles } from "lucide-react";
 import { Page, useApp } from "./AppContext";
+import type { Key } from "./i18n";
 
 const items = [
-  { id: "home", label: "Home", Icon: Home, fx: "glow" },
-  { id: "generator", label: "Generator", Icon: Sparkles, fx: "spin" },
-  { id: "history", label: "History", Icon: History, fx: "wave" },
-  { id: "settings", label: "Settings", Icon: Settings, fx: "gear" },
-] as const;
+  { id: "home", label: "nav.home", Icon: Home, fx: "glow" },
+  { id: "generator", label: "nav.generator", Icon: Sparkles, fx: "spin" },
+  { id: "history", label: "nav.history", Icon: History, fx: "wave" },
+  { id: "settings", label: "nav.settings", Icon: Settings, fx: "gear" },
+] as const satisfies readonly { id: Page; label: Key; Icon: typeof Home; fx: string }[];
 
 export function FloatingNav() {
-  const { page, go } = useApp();
+  const { page, go, t } = useApp();
   const idx = items.findIndex((i) => i.id === page);
   const [drops, setDrops] = useState<{ id: number; x: number; y: number; item: Page }[]>([]);
   const press = (e: MouseEvent<HTMLButtonElement>, item: Page) => {
@@ -22,14 +23,14 @@ export function FloatingNav() {
     go(item);
   };
   return (
-    <nav aria-label="Navigasi utama" className="float-nav glass" style={{ "--i": idx } as CSSProperties}>
+    <nav aria-label={t("nav.main")} className="float-nav glass" style={{ "--i": idx } as CSSProperties}>
       <span className="nav-slider" aria-hidden="true"><span key={page} className="nav-pill" /></span>
       {items.map(({ id, label, Icon, fx }) => {
         const active = page === id;
         return (
-          <button key={id} onClick={(e) => press(e, id)} aria-current={active ? "page" : undefined} aria-label={label} className={`nav-item ${active ? "active" : ""}`}>
+          <button key={id} onClick={(e) => press(e, id)} aria-current={active ? "page" : undefined} aria-label={t(label)} className={`nav-item ${active ? "active" : ""}`}>
             <span className={`ico relative z-10 flex ${active ? "fx-" + fx : ""}`}><Icon size={20} /></span>
-            <span className="nav-label relative z-10">{label}</span>
+            <span className="nav-label relative z-10">{t(label)}</span>
             {drops.filter((d) => d.item === id).map((d) => <span key={d.id} className="drop" style={{ left: d.x, top: d.y }}><i /></span>)}
           </button>
         );

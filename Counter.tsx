@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useApp } from "./AppContext";
 export function Counter({ value }: { value: number }) {
-  const { settings } = useApp();
+  const { settings, fmt } = useApp();
   const [shown, setShown] = useState(value);
   const from = useRef(value);
   useEffect(() => {
@@ -15,5 +15,5 @@ export function Counter({ value }: { value: number }) {
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [value, settings.reduceMotion, settings.intensity]);
-  return <>{shown.toLocaleString("id-ID")}</>;
+  return <>{fmt(shown)}</>;
 }

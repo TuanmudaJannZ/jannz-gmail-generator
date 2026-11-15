@@ -5,17 +5,18 @@ import { useApp } from "./AppContext";
 
 export function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
   const A = useApp();
+  const { t } = A;
   const [q, setQ] = useState(""), [idx, setIdx] = useState(0);
   const ref = useRef<HTMLInputElement>(null);
   const cmds = useMemo(() => [
-    { label: "Navigate to Generator", Icon: Sparkles, run: () => A.go("generator") },
-    { label: "Navigate to History", Icon: History, run: () => A.go("history") },
-    { label: "Open Settings", Icon: Settings, run: () => A.go("settings") },
-    { label: "Toggle Theme", Icon: Moon, run: () => A.updateSettings({ theme: A.settings.theme === "dark" ? "light" : "dark" }) },
-    { label: "Clear Results", Icon: Eraser, run: () => A.clearResults() },
-    { label: "Export Results (TXT)", Icon: Download, run: () => A.exportRows("txt", true) },
-    { label: "Export Results (CSV)", Icon: Download, run: () => A.exportRows("csv", true) },
-  ], [A]);
+    { label: t("cmd.gen"), Icon: Sparkles, run: () => A.go("generator") },
+    { label: t("cmd.hist"), Icon: History, run: () => A.go("history") },
+    { label: t("cmd.settings"), Icon: Settings, run: () => A.go("settings") },
+    { label: t("cmd.theme"), Icon: Moon, run: () => A.updateSettings({ theme: A.settings.theme === "dark" ? "light" : "dark" }) },
+    { label: t("cmd.clear"), Icon: Eraser, run: () => A.clearResults() },
+    { label: t("cmd.exportTxt"), Icon: Download, run: () => A.exportRows("txt", true) },
+    { label: t("cmd.exportCsv"), Icon: Download, run: () => A.exportRows("csv", true) },
+  ], [A, t]);
   const list = cmds.filter((c) => c.label.toLowerCase().includes(q.toLowerCase()));
   useEffect(() => { if (open) { setQ(""); setIdx(0); setTimeout(() => ref.current?.focus(), 30); } }, [open]);
   useEffect(() => setIdx(0), [q]);
@@ -30,10 +31,10 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
     <AnimatePresence>
       {open && (
         <motion.div className="modal-back" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={onClose}>
-          <motion.div role="dialog" aria-modal="true" aria-label="Command palette" className="glass cmd" onMouseDown={(e) => e.stopPropagation()} initial={{ opacity: 0, y: -16, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -10, scale: 0.98 }} transition={{ type: "spring", stiffness: 380, damping: 30 }}>
+          <motion.div role="dialog" aria-modal="true" aria-label={t("home.palette")} className="glass cmd" onMouseDown={(e) => e.stopPropagation()} initial={{ opacity: 0, y: -16, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -10, scale: 0.98 }} transition={{ type: "spring", stiffness: 380, damping: 30 }}>
             <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--edge)]">
               <Search size={18} className="muted" />
-              <input ref={ref} value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={key} placeholder="Ketik perintah…" className="bare-input" aria-label="Cari perintah" />
+              <input ref={ref} value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={key} placeholder={t("cmd.placeholder")} className="bare-input" aria-label={t("cmd.search")} />
               <kbd className="kbd">Esc</kbd>
             </div>
             <ul className="p-2 max-h-72 overflow-auto" role="listbox">
@@ -42,7 +43,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
                   <button className={`cmd-item ${i === idx ? "sel" : ""}`} onMouseEnter={() => setIdx(i)} onClick={() => exec(i)}><c.Icon size={17} />{c.label}</button>
                 </li>
               ))}
-              {!list.length && <li className="muted p-4 text-sm">Perintah tidak ditemukan.</li>}
+              {!list.length && <li className="muted p-4 text-sm">{t("cmd.none")}</li>}
             </ul>
           </motion.div>
         </motion.div>

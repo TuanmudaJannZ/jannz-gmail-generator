@@ -28,9 +28,9 @@ function Shell() {
             <div className="leading-tight"><p className="font-display text-[15px]">JannZ</p><p className="muted text-xs">Gmail Generator</p></div>
           </div>
           <div className="hidden md:flex items-center gap-2">
-            <span className="status glass-lite" title="Semua proses berjalan lokal di browser"><i />Local • Offline-ready</span>
-            <button className="icon-btn" onClick={() => setPalette(true)} aria-label="Buka command palette (Ctrl+K)"><kbd className="kbd">⌘K</kbd></button>
-            <button className="icon-btn" onClick={() => A.go("settings")} aria-label="Pengaturan"><Cog size={18} /></button>
+            <span className="status glass-lite" title={A.t("app.statusTip")}><i />{A.t("app.status")}</span>
+            <button className="icon-btn" onClick={() => setPalette(true)} aria-label={A.t("app.palette")}><kbd className="kbd">⌘K</kbd></button>
+            <button className="icon-btn" onClick={() => A.go("settings")} aria-label={A.t("app.settings")}><Cog size={18} /></button>
           </div>
         </div>
         <motion.main key={A.page} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2, ease: "easeOut" }}>
