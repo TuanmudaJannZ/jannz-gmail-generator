@@ -27,6 +27,19 @@ npm run preview  # pratinjau hasil build
 
 Kalau build gagal karena pengecekan TypeScript, sementara ubah script `build` di `package.json` menjadi `"vite build"`, lalu laporkan error-nya.
 
+## Yang baru di V13.0
+
+- **Pusat Data** (menu baru): Favorit & grup, Pusat Ekspor (TXT/CSV/JSON dari terpilih, dimuat, semua variasi, favorit, riwayat), Analitik (angka nyata dari penggunaan), dan Data (penyimpanan, backup/restore, reset).
+- **Penyimpanan aman:** skema berversi + migrasi, validasi, data rusak diamankan (bukan dihapus), ErrorBoundary, backup/restore dengan konfirmasi.
+- **PWA:** bisa dipasang dan membuka cangkang aplikasi secara offline setelah kunjungan pertama. Hanya file aplikasi yang di-cache, **tidak pernah data email**. Notifikasi pembaruan memakai tombol "Muat ulang"; ubah `VERSION` di `sw.js` setiap rilis.
+- Ekspor besar per potongan dengan progress, batal, dan peringatan ukuran. Kontras tombol otomatis mengikuti warna aksen.
+
+### Tes logika (tanpa npm)
+
+```bash
+bash run-tests.sh   # Node 22.6+; menguji generator, storage, backup, ekspor, kontras, favorit/statistik
+```
+
 ## Fitur
 
 **Generator**

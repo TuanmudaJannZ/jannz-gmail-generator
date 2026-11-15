@@ -2,6 +2,8 @@
   "name": "JannZ Gmail Generator",
   "short_name": "JannZ",
   "description": "Generate. Organize. Simplify.",
+  "id": "/",
+  "lang": "id",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

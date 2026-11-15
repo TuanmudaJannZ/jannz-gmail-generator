@@ -1,11 +1,12 @@
 import { CSSProperties, MouseEvent, useState } from "react";
-import { History, Home, Settings, Sparkles } from "lucide-react";
+import { History, Home, LayoutDashboard, Settings, Sparkles } from "lucide-react";
 import { Page, useApp } from "./AppContext";
 import type { Key } from "./i18n";
 
 const items = [
   { id: "home", label: "nav.home", Icon: Home, fx: "glow" },
   { id: "generator", label: "nav.generator", Icon: Sparkles, fx: "spin" },
+  { id: "hub", label: "nav.hub", Icon: LayoutDashboard, fx: "glow" },
   { id: "history", label: "nav.history", Icon: History, fx: "wave" },
   { id: "settings", label: "nav.settings", Icon: Settings, fx: "gear" },
 ] as const satisfies readonly { id: Page; label: Key; Icon: typeof Home; fx: string }[];

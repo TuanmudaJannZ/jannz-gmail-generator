@@ -11,14 +11,16 @@ function Particles() {
     size(); addEventListener("resize", size);
     const loop = () => {
       ctx.clearRect(0, 0, w, h);
-      if (!document.hidden) for (const p of ps) {
+      for (const p of ps) {
         p.y -= p.s * 16; if (p.y < 0) { p.y = 1; p.x = Math.random(); }
         ctx.beginPath(); ctx.fillStyle = `rgba(167,139,250,${p.a})`; ctx.arc(p.x * w, p.y * h, p.r * d, 0, 7); ctx.fill();
       }
       raf = requestAnimationFrame(loop);
     };
-    loop();
-    return () => { cancelAnimationFrame(raf); removeEventListener("resize", size); };
+    const vis = () => { cancelAnimationFrame(raf); if (!document.hidden) loop(); }; // loop berhenti total saat tab tidak aktif
+    document.addEventListener("visibilitychange", vis);
+    vis();
+    return () => { cancelAnimationFrame(raf); removeEventListener("resize", size); document.removeEventListener("visibilitychange", vis); };
   }, []);
   return <canvas ref={ref} className="fixed inset-0 h-full w-full pointer-events-none" aria-hidden="true" />;
 }

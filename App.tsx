@@ -7,6 +7,8 @@ import { CommandPalette } from "./CommandPalette";
 import { HomePage } from "./HomePage";
 import { GeneratorPage } from "./GeneratorPage";
 import { HistoryPage } from "./HistoryPage";
+import { HubPage } from "./HubPage";
+import { registerSW } from "./pwa";
 import { SettingsPage } from "./SettingsPage";
 import { Toaster } from "./Toast";
 import { initRipple } from "./ripple";
@@ -15,7 +17,13 @@ import { Settings as Cog } from "lucide-react";
 function Shell() {
   const A = useApp();
   const [palette, setPalette] = useState(false);
+  const [apply, setApply] = useState<{ run: () => void } | null>(null);
+  useEffect(() => registerSW((run) => setApply({ run })), []);
   useEffect(() => initRipple(), []);
+  useEffect(() => { // jeda animasi CSS saat tab tidak aktif
+    const v = () => document.documentElement.classList.toggle("tab-hidden", document.hidden);
+    v(); document.addEventListener("visibilitychange", v); return () => document.removeEventListener("visibilitychange", v);
+  }, []);
   useEffect(() => {
     const h = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setPalette((o) => !o); } };
     addEventListener("keydown", h); return () => removeEventListener("keydown", h);
@@ -38,12 +46,20 @@ function Shell() {
         <main key={A.page} className="page-in">
             {A.page === "home" && <HomePage openPalette={() => setPalette(true)} />}
             {A.page === "generator" && <GeneratorPage />}
+            {A.page === "hub" && <HubPage />}
             {A.page === "history" && <HistoryPage />}
             {A.page === "settings" && <SettingsPage />}
           </main>
       </div>
       <FloatingNav />
       <CommandPalette open={palette} onClose={() => setPalette(false)} />
+      {apply && (
+        <div className="update-banner glass" role="status">
+          <div className="min-w-0"><p className="text-sm font-medium">{A.t("pwa.update")}</p><p className="muted text-xs">{A.t("pwa.warn")}</p></div>
+          <button className="btn btn-glass" onClick={() => setApply(null)}>{A.t("pwa.later")}</button>
+          <button className="btn btn-primary" onClick={apply.run}>{A.t("pwa.reload")}</button>
+        </div>
+      )}
       <Toaster />
     </MotionConfig>
   );

@@ -1,5 +1,5 @@
 import { KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
-import { Download, Eraser, History, Moon, Search, Settings, Sparkles } from "lucide-react";
+import { Download, Eraser, History, LayoutDashboard, Moon, Search, Settings, Sparkles } from "lucide-react";
 import { useApp } from "./AppContext";
 import { Modal } from "./Modal";
 
@@ -10,12 +10,14 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
   const listRef = useRef<HTMLUListElement>(null);
   const cmds = useMemo(() => [
     { label: t("cmd.gen"), Icon: Sparkles, run: () => A.go("generator") },
+    { label: t("cmd.hub"), Icon: LayoutDashboard, run: () => A.go("hub") },
     { label: t("cmd.hist"), Icon: History, run: () => A.go("history") },
     { label: t("cmd.settings"), Icon: Settings, run: () => A.go("settings") },
     { label: t("cmd.theme"), Icon: Moon, run: () => A.updateSettings({ theme: A.settings.theme === "dark" ? "light" : "dark" }) },
     { label: t("cmd.clear"), Icon: Eraser, run: () => A.clearResults() },
     { label: t("cmd.exportTxt"), Icon: Download, run: () => A.exportRows("txt", true) },
     { label: t("cmd.exportCsv"), Icon: Download, run: () => A.exportRows("csv", true) },
+    { label: t("cmd.exportJson"), Icon: Download, run: () => A.exportRows("json", true) },
   ], [A, t]);
   const list = cmds.filter((c) => c.label.toLowerCase().includes(q.toLowerCase()));
   useEffect(() => { if (open) { setQ(""); setIdx(0); } }, [open]);
