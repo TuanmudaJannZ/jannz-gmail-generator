@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --bg: #080B14; --surface: #101827; --primary: #6C8CFF; --primary-rgb: 108 140 255; --secondary: #A78BFA; --accent: #67E8F9;
+  --bg: #04050B; --surface: #101827; --primary: #6C8CFF; --primary-rgb: 108 140 255; --secondary: #A78BFA; --accent: #67E8F9;
   --text: #F8FAFC; --muted: #94A3B8; --blur: 22px; --intensity: 1;
   --glass-a: rgb(255 255 255 / .10); --glass-b: rgb(255 255 255 / .03);
   --edge: rgb(255 255 255 / .12); --hi: rgb(255 255 255 / .7); --shadow: rgb(0 0 0 / .5);
@@ -170,3 +170,17 @@ body { -webkit-text-size-adjust: 100%; margin: 0; background: var(--bg); color: 
 @media (max-width: 768px), (pointer: coarse) {
   .float-nav { -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); }
 }
+
+/* ---------- Latar galaksi: lengkung cahaya + bintang + nebula ---------- */
+.nebula { position: absolute; inset: -20%; opacity: .32; }
+.arc { --s: min(130vw, 150vh); position: absolute; left: 50%; top: 8vh; width: var(--s); height: var(--s); margin-left: calc(var(--s) / -2); margin-top: calc(var(--s) / -2); border-radius: 50%;
+  background: radial-gradient(closest-side, transparent 55%, rgb(var(--primary-rgb) / .16) 65%, rgb(99 102 241 / .55) 76%, rgb(167 139 250 / .55) 84%, rgb(200 210 255 / .95) 93%, rgb(255 255 255 / .98) 97%, transparent 100%);
+  opacity: calc(.55 + .2 * var(--intensity, 1)); animation: arcBreath 9s ease-in-out infinite alternate; will-change: transform; }
+@keyframes arcBreath { from { transform: scale(1); } to { transform: scale(1.045); } }
+.stars { position: absolute; inset: 0; }
+.st { position: absolute; left: 0; top: 0; border-radius: 50%; animation: twinkle 4s ease-in-out infinite alternate; }
+.s1 { width: 1px; height: 1px; } .s2 { width: 1.5px; height: 1.5px; animation-duration: 6s; animation-delay: -2s; } .s3 { width: 2px; height: 2px; animation-duration: 5s; animation-delay: -1s; }
+@keyframes twinkle { from { opacity: .35; } to { opacity: 1; } }
+:root[data-theme="light"] .stars { display: none; }
+:root[data-theme="light"] .arc { opacity: .4; }
+:root[data-theme="light"] .nebula { opacity: .5; }

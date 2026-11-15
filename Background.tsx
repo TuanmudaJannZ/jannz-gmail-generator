@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useApp } from "./AppContext";
 
 function Particles() {
@@ -34,11 +34,29 @@ function Spotlight() {
   return <div ref={ref} className="spotlight" aria-hidden="true" />;
 }
 
+/** Bintang statis via box-shadow (tanpa JS per-frame, hanya opacity berkedip) */
+function layer(n: number, W: number, H: number) {
+  const tints = ["255 255 255", "190 205 255", "215 190 255"];
+  return Array.from({ length: n }, () => `${Math.round(Math.random() * W)}px ${Math.round(Math.random() * H)}px rgb(${tints[Math.floor(Math.random() * 3)]} / ${(0.4 + Math.random() * 0.6).toFixed(2)})`).join(",");
+}
+
 export function Background() {
   const { settings } = useApp();
+  const small = typeof matchMedia !== "undefined" && matchMedia("(max-width:640px)").matches;
+  const stars = useMemo(() => {
+    const W = Math.max(innerWidth, screen.width), H = Math.max(innerHeight, screen.height);
+    const k = small ? 0.6 : 1;
+    return [layer(Math.round(90 * k), W, H), layer(Math.round(36 * k), W, H), layer(Math.round(12 * k), W, H)];
+  }, [small]);
   return (
     <div className="bg-root" aria-hidden="true">
-      <div className="aurora"><i className="blob b1" /><i className="blob b2" /><i className="blob b3" /></div>
+      <div className="nebula"><i className="blob b1" /><i className="blob b2" /></div>
+      <div className="stars">
+        <i className="st s1" style={{ boxShadow: stars[0] }} />
+        <i className="st s2" style={{ boxShadow: stars[1] }} />
+        <i className="st s3" style={{ boxShadow: stars[2] }} />
+      </div>
+      <div className="arc" />
       {settings.particles && !settings.reduceMotion && <Particles />}
       {settings.cursor && !settings.reduceMotion && <Spotlight />}
     </div>
