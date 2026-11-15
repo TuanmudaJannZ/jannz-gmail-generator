@@ -33,7 +33,7 @@ function useStore() {
     tRef.current = window.setTimeout(() => setToastMsg(null), 2200);
   }, []);
   const sfx = useCallback((k: Sfx) => { if (sRef.current.sound) play(k); }, []);
-  const go = useCallback((p: Page) => { sfx("nav"); setPage(p); window.scrollTo({ top: 0, behavior: "smooth" }); }, [sfx]);
+  const go = useCallback((p: Page) => { sfx("nav"); setPage(p); window.scrollTo(0, 0); }, [sfx]);
 
   const run = useCallback((raw: string, lim: number) => {
     const p = parseGmail(raw);

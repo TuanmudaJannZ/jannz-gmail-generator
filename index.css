@@ -155,3 +155,18 @@ body { -webkit-text-size-adjust: 100%; margin: 0; background: var(--bg); color: 
 @keyframes fxGear { from { transform: rotate(0); } to { transform: rotate(180deg); } }
 :root[data-reduce="true"] .drop, :root[data-reduce="true"] .ripple { display: none; }
 @media (prefers-reduced-motion: reduce) { .drop, .ripple { display: none; } }
+
+/* ---------- Nav v4: lebar tetap + slider berbasis transform (tanpa layout shift) ---------- */
+.float-nav { display: grid; grid-template-columns: repeat(4, 1fr); width: min(92vw, 380px); max-width: none; padding: 6px; gap: 0; }
+.nav-slider { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc((100% - 12px) / 4); pointer-events: none;
+  transform: translateX(calc(var(--i, 0) * 100%)); transition: transform .5s cubic-bezier(.34, 1.25, .5, 1); will-change: transform; }
+.nav-slider .nav-pill { animation: pillStretch .5s ease-out; }
+@keyframes pillStretch { 0% { transform: scale(1); } 35% { transform: scaleX(1.16) scaleY(.93); } 100% { transform: scale(1); } }
+.nav-item { flex-direction: column; justify-content: center; gap: 3px; padding: 9px 2px 7px; min-width: 0; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+.nav-item:active .ico { transform: scale(.88); }
+.ico { transition: transform .15s; }
+.nav-label { font-size: 10.5px; font-weight: 500; line-height: 1; white-space: nowrap; }
+.nav-item.active { color: var(--text); }
+@media (max-width: 768px), (pointer: coarse) {
+  .float-nav { -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); }
+}
