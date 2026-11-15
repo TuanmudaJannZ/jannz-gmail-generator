@@ -20,7 +20,7 @@ export function HistoryPage() {
       {A.history.length === 0 && <GlassCard tilt={false} className="p-8 text-center muted">{t("hist.empty")}</GlassCard>}
       <ul className="space-y-3">
         {A.history.map((h, i) => (
-          <motion.li key={h.id} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
+          <motion.li key={h.id} initial={{ y: 14 }} animate={{ y: 0 }} transition={{ delay: i * 0.04 }}>
             <GlassCard tilt={false} className="p-4 flex flex-wrap items-center gap-3">
               <div className="flex-1 min-w-[200px]">
                 <p className="mono text-sm break-all">{h.original}</p>
@@ -34,7 +34,7 @@ export function HistoryPage() {
       </ul>
       <AnimatePresence>
         {confirm && (
-          <motion.div className="modal-back" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={() => setConfirm(false)}>
+          <motion.div className="modal-back" initial={{ backgroundColor: "rgba(3,6,14,0)" }} animate={{ backgroundColor: "rgba(3,6,14,0.55)" }} exit={{ backgroundColor: "rgba(3,6,14,0)" }} onMouseDown={() => setConfirm(false)}>
             <motion.div role="alertdialog" aria-modal="true" aria-label={t("hist.confirmAria")} className="glass p-6 max-w-sm w-[90%]" onMouseDown={(e) => e.stopPropagation()} initial={{ scale: 0.94, y: 12 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, opacity: 0 }}>
               <h2 className="text-lg">{t("hist.confirmTitle")}</h2>
               <p className="muted text-sm mt-2">{t("hist.confirmBody")}</p>

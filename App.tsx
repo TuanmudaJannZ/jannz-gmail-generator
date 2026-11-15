@@ -33,7 +33,7 @@ function Shell() {
             <button className="icon-btn" onClick={() => A.go("settings")} aria-label={A.t("app.settings")}><Cog size={18} /></button>
           </div>
         </div>
-        <motion.main key={A.page} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2, ease: "easeOut" }}>
+        <motion.main key={A.page} initial={{ y: 12 }} animate={{ y: 0 }} transition={{ duration: 0.25, ease: "easeOut" }}>
             {A.page === "home" && <HomePage openPalette={() => setPalette(true)} />}
             {A.page === "generator" && <GeneratorPage />}
             {A.page === "history" && <HistoryPage />}

@@ -30,7 +30,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
   return (
     <AnimatePresence>
       {open && (
-        <motion.div className="modal-back" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={onClose}>
+        <motion.div className="modal-back" initial={{ backgroundColor: "rgba(3,6,14,0)" }} animate={{ backgroundColor: "rgba(3,6,14,0.55)" }} exit={{ backgroundColor: "rgba(3,6,14,0)" }} onMouseDown={onClose}>
           <motion.div role="dialog" aria-modal="true" aria-label={t("home.palette")} className="glass cmd" onMouseDown={(e) => e.stopPropagation()} initial={{ opacity: 0, y: -16, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -10, scale: 0.98 }} transition={{ type: "spring", stiffness: 380, damping: 30 }}>
             <div className="flex items-center gap-2 px-4 py-3 border-b border-[var(--edge)]">
               <Search size={18} className="muted" />
